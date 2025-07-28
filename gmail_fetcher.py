@@ -14,16 +14,16 @@ def authenticate_gmail():
 
 def search_emails(service, query):
     result = service.users().messages().list(userId="me", q=query).execute()
-    print("Result: ", result)
     messages = result.get("messages", [])
     emails = []
     
-    print("Messages", messages)
+    
     
     for msg in messages:
         text = service.users().messages().get(userId="me", id=msg['id'], format='full').execute()
         payload = text['payload']
         headers = payload['headers']
+        
         parts = payload.get('parts', [])   
         body = "" 
         
@@ -38,4 +38,5 @@ def search_emails(service, query):
         date = next((h['value'] for h in headers if h['name']=='Date'), '')
         emails.append({ 'subject': subject, 'date': date, 'body': body })
     
+    print(f"Found {len(emails)}, {query}")
     return emails
