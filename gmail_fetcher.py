@@ -39,35 +39,6 @@ def authenticate_gmail():
 
     return build('gmail', 'v1', credentials=creds)
 
-# def search_emails(service, query):
-#     result = service.users().messages().list(userId="me", q=query).execute()
-#     messages = result.get("messages", [])
-#     emails = []
-    
-    
-    
-#     for msg in messages:
-#         text = service.users().messages().get(userId="me", id=msg['id'], format='full').execute()
-#         payload = text['payload']
-#         headers = payload['headers']
-        
-#         parts = payload.get('parts', [])   
-#         body = "" 
-        
-#         if "data" in payload.get('body', {}):
-#             body = base64.urlsafe_b64decode(payload['body']['data']).decode()
-#         elif parts:
-#             for part in parts:
-#                 if part['mimeType'] == 'text/plain':
-#                     body = base64.urlsafe_b64decode(part['body']['data']).decode()
-#                     break
-#         subject = next((h['value'] for h in headers if h['name']=='Subject'), '')
-#         date = next((h['value'] for h in headers if h['name']=='Date'), '')
-#         emails.append({ 'subject': subject, 'date': date, 'body': body })
-    
-#     print(f"Found {len(emails)}, {query}")
-#     return emails
-
 def parse_message(text):
     payload = text['payload']
     headers = payload['headers']
@@ -108,7 +79,7 @@ def search_emails(service, query, user_id='me'):
     for msg in all_messages:
         message = service.users().messages().get(userId=user_id, id=msg['id'], format='full').execute()
         # parse message and append to full_emails
-        full_emails.append(parse_message(message))  # <-- your custom logic
+        full_emails.append(parse_message(message))
 
     print(f"Found {len(full_emails)} emails, {query}")
     return full_emails
