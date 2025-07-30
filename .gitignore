@@ -1,2 +1,5 @@
 credentials.json
 .env
+rag_email_env
+__pycache__
+*.csv
